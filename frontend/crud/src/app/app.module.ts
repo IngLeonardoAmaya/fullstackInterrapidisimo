@@ -16,6 +16,9 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { EditarInscripcionComponent } from './components/inscripcion/editar-inscripcion/editar-inscripcion.component';
+import { CrearInscripcionComponent } from './components/inscripcion/crear-inscripcion/crear-inscripcion.component';
+import { ListaInscripcionComponent } from './components/inscripcion/lista-inscripcion/lista-inscripcion.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +32,10 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
     CrearMateriasComponent,
     ListarMateriasComponent,
     EditarMateriasComponent,
-    NavbarComponent
+    NavbarComponent,
+    ListaInscripcionComponent,
+    EditarInscripcionComponent,
+    CrearInscripcionComponent
   ],
   imports: [
     BrowserModule,
