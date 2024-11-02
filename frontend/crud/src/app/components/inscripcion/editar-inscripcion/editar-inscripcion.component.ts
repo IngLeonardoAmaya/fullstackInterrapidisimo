@@ -19,6 +19,7 @@ export class EditarInscripcionComponent implements OnInit{
   materias: Materia[] = [];
   profesores: Profesor[] = [];
   inscripcionId: number;
+  estudiantesCompartidos: string[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -46,6 +47,20 @@ export class EditarInscripcionComponent implements OnInit{
     this.inscripcionService.getEstudiantes().subscribe((data) => (this.estudiantes = data));
     this.inscripcionService.getMaterias().subscribe((data) => (this.materias = data));
     this.inscripcionService.getProfesores().subscribe((data) => (this.profesores = data));
+  }
+
+  onMateriaChange(materiaId: number): void {
+    if (materiaId) {
+      this.inscripcionService.getEstudiantesCompartidos(materiaId).subscribe(
+        (data) => {
+          this.estudiantesCompartidos = data;
+        },
+        (error) => {
+          console.error('Error al cargar estudiantes compartidos:', error);
+          this.toastr.error('Error al cargar estudiantes compartidos');
+        }
+      );
+    }
   }
 
   cargarInscripcion(): void {

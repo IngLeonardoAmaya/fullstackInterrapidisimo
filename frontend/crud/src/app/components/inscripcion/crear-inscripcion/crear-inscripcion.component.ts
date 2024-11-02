@@ -18,6 +18,9 @@ export class CrearInscripcionComponent implements OnInit {
   estudiantes: Estudiante[] = [];
   materias: Materia[] = [];
   profesores: Profesor[] = [];
+  estudianteInscripciones: Inscripcion[] = [];
+  estudiantesCompartidos: string[] = []; 
+
 
   constructor(
     private fb: FormBuilder,
@@ -29,11 +32,53 @@ export class CrearInscripcionComponent implements OnInit {
       estudianteId: [null, Validators.required],
       materiaId: [null, Validators.required],
       profesorId: [null, Validators.required]
-    });
+    },{ validators: this.validarReglasNegocio.bind(this) });
   }
 
   ngOnInit(): void {
     this.cargarListas();
+  }
+
+  onMateriaChange(materiaId: number): void {
+    if (materiaId) {
+      this.inscripcionService.getEstudiantesCompartidos(materiaId).subscribe(
+        (data) => {
+          this.estudiantesCompartidos = data;
+        },
+        (error) => {
+          console.error('Error al cargar estudiantes compartidos:', error);
+          this.toastr.error('Error al cargar estudiantes compartidos');
+        }
+      );
+    }
+  }
+
+  validarReglasNegocio(formGroup: FormGroup) {
+    const estudianteId = formGroup.get('estudianteId')?.value;
+    const materiaId = formGroup.get('materiaId')?.value;
+    const profesorId = formGroup.get('profesorId')?.value;
+
+    if (estudianteId && materiaId && profesorId) {
+      // Validación para que el estudiante solo pueda seleccionar 3 materias
+      this.inscripcionService.getInscripciones().subscribe((inscripciones) => {
+        this.estudianteInscripciones = inscripciones.filter(i => i.estudianteId === estudianteId);
+
+        if (this.estudianteInscripciones.length >= 3) {
+          formGroup.get('materiaId')?.setErrors({ limiteMaterias: 'El estudiante ya tiene 3 materias inscritas.' });
+        } else {
+          formGroup.get('materiaId')?.setErrors(null);
+        }
+
+        // Validación para que el estudiante no tenga clases con el mismo profesor
+        if (this.estudianteInscripciones.some(i => i.profesorId === profesorId)) {
+          formGroup.get('profesorId')?.setErrors({ profesorDuplicado: 'El estudiante ya tiene una materia con este profesor.' });
+        } else {
+          formGroup.get('profesorId')?.setErrors(null);
+        }
+      });
+    }
+
+    return null;
   }
 
   cargarListas(): void {

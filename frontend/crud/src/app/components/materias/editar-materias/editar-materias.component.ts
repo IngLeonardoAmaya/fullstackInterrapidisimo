@@ -27,7 +27,7 @@ export class EditarMateriasComponent implements OnInit {
   ) {
     this.editarMateriaForm = this.fb.group({
       nombre: ['', Validators.required],
-      creditos: [3, [Validators.required, Validators.min(1)]],
+      creditos: [{ value: 3, disabled: true }],
       profesorId: [null, Validators.required]
     });
   }
@@ -48,7 +48,7 @@ export class EditarMateriasComponent implements OnInit {
       (data) => {
         this.editarMateriaForm.patchValue({
           nombre: data.nombre,
-          creditos: data.creditos,
+          creditos: 3,
           profesorId: data.profesorId
         });
       },
@@ -75,7 +75,7 @@ export class EditarMateriasComponent implements OnInit {
     const materia: Materia = {
       id: this.materiaId,
       nombre: this.editarMateriaForm.value.nombre,
-      creditos: this.editarMateriaForm.value.creditos,
+      creditos: 3,
       profesorId: this.editarMateriaForm.value.profesorId
     };
 

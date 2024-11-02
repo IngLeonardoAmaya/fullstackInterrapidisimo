@@ -16,6 +16,10 @@ export class InscripcionesService
 
   constructor(private http: HttpClient) { }
 
+  getEstudiantesCompartidos(materiaId: number): Observable<string[]> {
+    return this.http.get<string[]>(`${this.apiUrl}/EstudiantesCompartidos/${materiaId}`);
+  }
+
   getInscripciones(): Observable<Inscripcion[]> {
     return this.http.get<Inscripcion[]>(`${this.apiUrl}`);
   }

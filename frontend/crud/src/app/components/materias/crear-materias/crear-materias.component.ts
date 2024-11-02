@@ -64,7 +64,7 @@ export class CrearMateriasComponent {
 
     const materia: Materia = {
         nombre: this.materiaForm.get('nombre')?.value,
-        creditos: this.materiaForm.get('creditos')?.value,
+        creditos: 3,
         profesorId: profesorId
     };
 
